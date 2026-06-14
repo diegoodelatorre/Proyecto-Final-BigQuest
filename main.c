@@ -4,6 +4,15 @@
 #include "juego.h"
 
 int main() {
-    printf("Bienvenido a BitQuest!\n");
+    int jugador_f = 5;
+    int jugador_c = 5;
+
+    // Mapa completo
+    inicializar_mapa();
+    
+    // La parte visible
+    imprimir_ventana(jugador_f, jugador_c);
+    
+    system("pause");
     return 0;
 }
