@@ -11,16 +11,27 @@ int main() {
 
     // Variable de estado para la llave
     int tiene_llave = 0;
+    
+    // Variable para las monedas recolectadas
+    int monedas_recolectadas = 0;
 
     // Mapa completo
     inicializar_mapa();
     
+    // Total de celdas en el mapa
+    int total_celdas = FILAS_MAPA * COLS_MAPA;
+    
+    // Se usan las rutinas de NASM para contar dinamicamente
+    int total_monedas = contar_caracteres((char*)mapa_actual, total_celdas, 'M');
+    int celdas_libres = contar_celdas_libres((char*)mapa_actual, total_celdas);
+
     // Ciclo principal del juego
     while (jugando) {
         // La parte visible
         imprimir_ventana(jugador_f, jugador_c);
 
-        printf("Llave: %s\n", tiene_llave ? "SI" : "NO");
+        // Muestra el progreso de monedas y la llave
+        printf("Monedas: %d/%d | Llave: %s\n", monedas_recolectadas, total_monedas, tiene_llave ? "SI" : "NO");
 
         // Lee la tecla presionada
         tecla = _getch();
@@ -60,6 +71,12 @@ int main() {
             jugador_f = nueva_f;
             jugador_c = nueva_c;
 
+            // Interaccion con las monedas 'M'
+            if (detectar_objeto((char*)mapa_actual, COLS_MAPA, jugador_f, jugador_c, 'M')) {
+                monedas_recolectadas++;
+                mapa_actual[jugador_f][jugador_c] = '.'; // Desaparece cuando la recoges
+            }
+
             // Interaccion con la llave 'K'
             if (detectar_objeto((char*)mapa_actual, COLS_MAPA, jugador_f, jugador_c, 'K')) {
                 tiene_llave = 1;
@@ -73,6 +90,10 @@ int main() {
                 printf("=================================\n");
                 printf("  ¡Llegaste a la salida! \n");
                 printf("=================================\n");
+                // Muestra los contadores que calculo NASM
+                printf("Celdas libres contadas en NASM: %d\n", celdas_libres);
+                printf("Monedas recolectadas: %d/%d\n", monedas_recolectadas, total_monedas);
+                printf("=================================\n");
             }
         }
     }
@@ -80,4 +101,3 @@ int main() {
     system("pause");
     return 0;
 }
-

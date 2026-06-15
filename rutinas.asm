@@ -59,3 +59,49 @@ detectar_objeto:
 .objeto_encontrado:
     mov eax, 1
     ret
+
+global contar_caracteres
+contar_caracteres:
+    xor eax, eax
+    xor r9, r9
+    movsxd rdx, edx
+
+.bucle_contar:
+    cmp r9, rdx
+    jge .fin_contar
+
+    movzx r10d, byte [rcx + r9]
+    cmp r10d, r8d
+    jne .siguiente
+
+    inc eax
+
+.siguiente:
+    inc r9
+    jmp .bucle_contar
+
+.fin_contar:
+    ret
+
+global contar_celdas_libres
+contar_celdas_libres:
+    xor eax, eax
+    xor r8, r8
+    movsxd rdx, edx
+
+.bucle_libres:
+    cmp r8, rdx
+    jge .fin_libres
+
+    movzx r9d, byte [rcx + r8]
+    cmp r9b, '.'
+    jne .siguiente_libre
+
+    inc eax
+
+.siguiente_libre:
+    inc r8
+    jmp .bucle_libres
+
+.fin_libres:
+    ret
