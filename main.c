@@ -20,23 +20,30 @@ int main() {
         // Lee la tecla presionada
         tecla = _getch();
 
+        // Variables para el nuevo movimiento
+        int nueva_f = jugador_f;
+        int nueva_c = jugador_c;
+
         // Por ahora el movimiento es libre
         switch (tecla) {
-            case 'w': case 'W': jugador_f--; break;
-            case 's': case 'S': jugador_f++; break;
-            case 'a': case 'A': jugador_c--; break;
-            case 'd': case 'D': jugador_c++; break;
+            case 'w': case 'W': nueva_f--; break;
+            case 's': case 'S': nueva_f++; break;
+            case 'a': case 'A': nueva_c--; break;
+            case 'd': case 'D': nueva_c++; break;
             case 'q': case 'Q': 
                 system("cls");
                 printf("Saliste del juego.\n");
                 exit(0);
         }
 
-        // Validaciones basicas por ahora para que no se salga del mapa
-        if (jugador_f < 0) jugador_f = 0;
-        if (jugador_c < 0) jugador_c = 0;
-        if (jugador_f >= FILAS_MAPA) jugador_f = FILAS_MAPA - 1;
-        if (jugador_c >= COLS_MAPA) jugador_c = COLS_MAPA - 1;
+        // Se valida si esta chocando con una pared o no
+        int es_valido = validar_movimiento((char*)mapa_actual, COLS_MAPA, nueva_f, nueva_c);
+
+        // Si el movimiento es valido se actualiza la posicion del jugador
+        if (es_valido == 1) {
+            jugador_f = nueva_f;
+            jugador_c = nueva_c;
+        }
     }
     
     system("pause");
