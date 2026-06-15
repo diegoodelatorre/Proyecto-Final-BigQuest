@@ -9,6 +9,9 @@ int main() {
     char tecla;
     int jugando = 1;
 
+    // Variable de estado para la llave
+    int tiene_llave = 0;
+
     // Mapa completo
     inicializar_mapa();
     
@@ -16,6 +19,8 @@ int main() {
     while (jugando) {
         // La parte visible
         imprimir_ventana(jugador_f, jugador_c);
+
+        printf("Llave: %s\n", tiene_llave ? "SI" : "NO");
 
         // Lee la tecla presionada
         tecla = _getch();
@@ -39,10 +44,36 @@ int main() {
         // Se valida si esta chocando con una pared o no
         int es_valido = validar_movimiento((char*)mapa_actual, COLS_MAPA, nueva_f, nueva_c);
 
-        // Si el movimiento es valido se actualiza la posicion del jugador
+        // Interaccion con la puerta 'D'
+        if (es_valido == 1) {
+            if (detectar_objeto((char*)mapa_actual, COLS_MAPA, nueva_f, nueva_c, 'D')) {
+                if (tiene_llave) {
+                    mapa_actual[nueva_f][nueva_c] = '.'; // Solo se abre si tiene la llave
+                } else {
+                    es_valido = 0; // Si no se bloquea
+                }
+            }
+        }
+
+        // Si sigue siendo valido el movimiento se actualiza la posicion
         if (es_valido == 1) {
             jugador_f = nueva_f;
             jugador_c = nueva_c;
+
+            // Interaccion con la llave 'K'
+            if (detectar_objeto((char*)mapa_actual, COLS_MAPA, jugador_f, jugador_c, 'K')) {
+                tiene_llave = 1;
+                mapa_actual[jugador_f][jugador_c] = '.'; // Desaparece cuando la recoges
+            }
+
+            // Llega a la salida 'E'
+            if (detectar_objeto((char*)mapa_actual, COLS_MAPA, jugador_f, jugador_c, 'E')) {
+                jugando = 0; // Se rompe el ciclo del juego
+                system("cls");
+                printf("=================================\n");
+                printf("  ¡Llegaste a la salida! \n");
+                printf("=================================\n");
+            }
         }
     }
     
