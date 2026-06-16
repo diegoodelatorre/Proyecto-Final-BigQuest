@@ -15,8 +15,8 @@ int main() {
     // Variable para las monedas recolectadas
     int monedas_recolectadas = 0;
 
-    // Mapa completo
-    inicializar_mapa();
+    // --- NUEVO: Se le pasa el nivel 1 al mapa para cargar el primer laberinto ---
+    inicializar_mapa(1);
     
     // Total de celdas en el mapa
     int total_celdas = FILAS_MAPA * COLS_MAPA;

@@ -3,7 +3,7 @@
 
 #include "mapas.h"
 
-void inicializar_mapa();
+void inicializar_mapa(int nivel);
 void imprimir_ventana(int jugador_f, int jugador_c);
 
 // Funciones de NASM
