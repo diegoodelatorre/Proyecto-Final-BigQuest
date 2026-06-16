@@ -105,3 +105,25 @@ contar_celdas_libres:
 
 .fin_libres:
     ret
+
+global calcular_puntaje
+calcular_puntaje:
+    ; Se multiplican las monedas por 100
+    mov eax, ecx
+    imul eax, 100     ; eax = Monedas * 100
+
+    ; Se restan los pasos
+    sub eax, edx      ; eax = (Monedas * 100) - Pasos
+
+    ; Se suma un bonus por completar el nivel
+    mov r9d, r8d
+    imul r9d, 500
+    add eax, r9d
+
+    ; Como minimo se deja de puntaje 0
+    cmp eax, 0
+    jge .fin_puntaje
+    mov eax, 0
+
+.fin_puntaje:
+    ret
